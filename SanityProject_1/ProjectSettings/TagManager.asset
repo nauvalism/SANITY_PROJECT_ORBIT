@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 132456001
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: PLANETS
+    uniqueID: 1585328711
+    locked: 0
+  - name: PLAYER
+    uniqueID: 1653372839
+    locked: 0
+  - name: FRONT
+    uniqueID: 2057637971
     locked: 0
