@@ -9,6 +9,12 @@ public class BaseShip : MonoBehaviour
     [Header("Health and Aliveness")]
     [SerializeField] private List<Sprite> ShipHealthSprites;
     [SerializeField] public int hp = 2;
+    [SerializeField] ShipControl shipMovement;
+
+    [Header("Positions")]
+    [SerializeField] Transform moveRoot;
+    [SerializeField] List<Transform> leftRightMost;
+    
 
     public void Damage(int amt)
     {
@@ -28,6 +34,11 @@ public class BaseShip : MonoBehaviour
         }
 
         return true;
+    }
+
+    public int GetHP()
+    {
+        return hp;
     }
 
     [Header("Movements and Rotations")]
@@ -63,6 +74,31 @@ public class BaseShip : MonoBehaviour
     
 
     protected virtual void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Pellet"))
+        {
+            
+            other.transform.parent.parent.GetComponent<BasePellet>().Taken();
+            GameplayController.instance.AddScore();
+        }
+    }
+
+    public void Activate()
+    {
+        shipMovement.EnableMovement();
+    }
+
+    public void ResetPosition()
+    {
+        LeanTween.cancel(moveRoot.gameObject);
+        moveRoot.transform.position = leftRightMost[0].position;
         
+    }
+
+    public void GoToGamePosition(System.Action next)
+    {
+        LeanTween.cancel(moveRoot.gameObject);
+        LeanTween.moveLocalX(moveRoot.gameObject, .0f, 1.5f).setEase(LeanTweenType.easeOutQuad).setOnComplete(()=>{
+            next();
+        });
     }
 }

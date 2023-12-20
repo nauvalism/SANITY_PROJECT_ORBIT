@@ -12,13 +12,15 @@ public class ShipControl : MonoBehaviour
 
     public void EnableMovement()
     {
-
+        move = true;
     }
 
     public void DisableMovement()
     {
-        
+        move = false;
     }
+
+
 
     private void FixedUpdate()
     {

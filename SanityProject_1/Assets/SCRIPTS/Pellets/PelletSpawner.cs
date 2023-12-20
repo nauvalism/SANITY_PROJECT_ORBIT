@@ -19,7 +19,7 @@ public class PelletSpawner : MonoBehaviour
     }
 
     private void Start() {
-        Spawn(20);
+        //Spawn(20);
     }
 
     public GameObject DoSpawn(Vector2 t)
@@ -36,13 +36,20 @@ public class PelletSpawner : MonoBehaviour
     {
         spawnedPellets = new List<BasePellet>();
         radiusHand.transform.localRotation = Quaternion.identity;
+        int counter = 0;
         for(float i = 0 ; i < 360.0f ; i += gap)
         {
+            if(i == 0)
+            {
+                continue;
+            }
             radiusHand.transform.localRotation = Quaternion.Euler(0,0,i);
             GameObject go;
             go = DoSpawn(transform.position);
             BasePellet bp = go.GetComponent<BasePellet>();
+            bp.Init(counter);
             spawnedPellets.Add(bp);
+            counter++;
         }
 
     
@@ -51,6 +58,19 @@ public class PelletSpawner : MonoBehaviour
     public void SpawnNotFromBeginning(float gap)
     {
 
+    }
+
+    public bool EvaluateIfAllPelletTaken()
+    {
+        for(int i = 0 ; i < spawnedPellets.Count ; i++)
+        {
+            if(spawnedPellets[i].GetActive())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
