@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform goO;
     AudioSource goAO;
     [SerializeField] Image flash;
+    [SerializeField] Button startBtn;
 
 
     private void Update() {
@@ -82,25 +83,31 @@ public class UIManager : MonoBehaviour
 
     public void ResetUI(int defaultHealth)
     {
+        startBtn.gameObject.SetActive(true);
         ResetScore();
         UpdateHP(defaultHealth);
     }
 
     public void Opening(System.Action after)
     {
-        LeanTween.value(rgCanvas.gameObject, 0.0f, 1.0f, 0.5f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float f)=>{
-            rgCanvas.alpha = f;
-        }).setOnComplete(()=>{
-            LeanTween.scale(readyO.gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutQuad).setDelay(1.0f).setOnComplete(()=>{
-                LeanTween.moveLocalX(readyO.gameObject, 1000.0f, 0.5f).setEase(LeanTweenType.easeInBack).setOnComplete(()=>{
-                    LeanTween.scale(goO.gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutBack).setOnComplete(()=>{
-                        flash.color = Color.white;
-                        after();
-                        LeanTween.alpha(flash.GetComponent<RectTransform>(), .0f, 1.0f);
-                    });
-                });
+        startBtn.gameObject.SetActive(false);
+        after();
+        
+        // LeanTween.value(rgCanvas.gameObject, 0.0f, 1.0f, 0.25f).setEase(LeanTweenType.easeOutQuad).setOnUpdate((float f)=>{
+        //     rgCanvas.alpha = f;
+        // }).setOnComplete(()=>{
+        //     LeanTween.scale(readyO.gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnComplete(()=>{
+        //         LeanTween.moveLocalX(readyO.gameObject, 1000.0f, 0.5f).setEase(LeanTweenType.easeInBack).setDelay(1.0f).setOnComplete(()=>{
+        //             LeanTween.scale(goO.gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutBack).setDelay(1.0f).setOnComplete(()=>{
+        //                 flash.color = Color.white;
+        //                 after();
+        //                 LeanTween.alpha(flash.GetComponent<RectTransform>(), .0f, 1.0f).setOnComplete(()=>{
+        //                     LeanTween.moveLocalX(goO.gameObject, 1000.0f, 0.5f).setEase(LeanTweenType.easeInBack);
+        //                 });
+        //             });
+        //         });
                 
-            });
-        });
+        //     });
+        // });
     }
 }

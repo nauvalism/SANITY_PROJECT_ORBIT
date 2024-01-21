@@ -10,7 +10,7 @@ public class BasePellet : MonoBehaviour
     [SerializeField] List<SpriteRenderer> graphics;
     [SerializeField] AudioSource pelletSound;
     [SerializeField] Collider2D pelletCol;
-    [SerializeField] bool active = true;
+    [SerializeField] bool _active = true;
 
     protected virtual void OnValidate()
     {
@@ -45,12 +45,12 @@ public class BasePellet : MonoBehaviour
     public virtual void Init(int id)
     {
         this.pelletID = id;
-        active = true;
+        _active = true;
     }
 
     public virtual void Taken()
     {
-        active = false;
+        _active = false;
         pelletSound.Play();
         pelletCol.enabled = false;
         LeanTween.cancel(mover.gameObject);
@@ -68,8 +68,8 @@ public class BasePellet : MonoBehaviour
         LeanTween.scale(graphicRoot.gameObject, Vector3.one, .025f);
     }
 
-    public bool GetActive()
+    public bool GetActivee()
     {
-        return active;
+        return _active;
     }
 }

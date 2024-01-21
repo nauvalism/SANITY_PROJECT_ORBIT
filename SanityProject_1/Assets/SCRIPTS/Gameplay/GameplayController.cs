@@ -2,9 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState
+{
+    opening = 0,
+    midGame = 1,
+    paused = 2,
+    ending = 3
+}
+
 public class GameplayController : MonoBehaviour
 {
     public static GameplayController instance {get;set;}
+    [SerializeField] GameState state;
     [SerializeField] CircleAnimation openingAnimation;
     [SerializeField] Camera OpeningCam;
     [SerializeField] float gameplayCamSize;
@@ -31,6 +40,7 @@ public class GameplayController : MonoBehaviour
 
     public void InitGame()
     {
+        SetState(GameState.opening);
         ui.ResetUI(playerShip.hp);
         ui.InitHP(playerShip.GetHP());
 
@@ -43,7 +53,7 @@ public class GameplayController : MonoBehaviour
         {
             openingAnimation.RestoreCirclez();
             ZoomCam(true);
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(1.0f);
             playerShip.GoToGamePosition(()=>{
                 ui.Opening(()=>{
                     StartGame();
@@ -55,10 +65,12 @@ public class GameplayController : MonoBehaviour
 
     public void StartGame()
     {
+        SetState(GameState.midGame);
         startSfx.Play();
         music.Play();
         pSpawner.Spawn(20);
         playerShip.Activate();
+        TBEController.instance.ActivateActiveTurret();
     }
 
     public void StopGame()
@@ -101,7 +113,7 @@ public class GameplayController : MonoBehaviour
         this.AddScore(scr);
         if(EvaluateIfAllPelletTaken())
         {
-
+            RespawnPellet(20);
         }
     }
 
@@ -111,7 +123,15 @@ public class GameplayController : MonoBehaviour
         ui.UpdateScore(score);
     }
 
-
+    public void RespawnPellet(int param)
+    {
+        StartCoroutine(Spawnn());
+        IEnumerator Spawnn()
+        {
+            yield return new WaitForSeconds(0.25f);
+            StartSpawningPellet(param);
+        }
+    }
 
     public void StartSpawningPellet(int param)
     {
@@ -126,5 +146,15 @@ public class GameplayController : MonoBehaviour
     public void ResetScore()
     {
         score = 0;
+    }
+
+    public void SetState(GameState _state)
+    {
+        this.state = _state;
+    }
+
+    public GameState GetState()
+    {
+        return this.state;
     }
 }

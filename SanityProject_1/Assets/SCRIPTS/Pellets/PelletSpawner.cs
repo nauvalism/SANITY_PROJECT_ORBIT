@@ -34,15 +34,25 @@ public class PelletSpawner : MonoBehaviour
 
     public void Spawn(float gap)
     {
+        if(spawnedPellets != null)
+        {
+            if(spawnedPellets.Count > 0)
+            {
+                for(int i = 0 ; i < spawnedPellets.Count; i++)
+                {
+                    Destroy(spawnedPellets[i]);
+                }
+            }
+        }
         spawnedPellets = new List<BasePellet>();
         radiusHand.transform.localRotation = Quaternion.identity;
         int counter = 0;
         for(float i = 0 ; i < 360.0f ; i += gap)
         {
-            if(i == 0)
-            {
-                continue;
-            }
+            // if(i == 0)
+            // {
+            //     continue;
+            // }
             radiusHand.transform.localRotation = Quaternion.Euler(0,0,i);
             GameObject go;
             go = DoSpawn(transform.position);
@@ -64,7 +74,7 @@ public class PelletSpawner : MonoBehaviour
     {
         for(int i = 0 ; i < spawnedPellets.Count ; i++)
         {
-            if(spawnedPellets[i].GetActive())
+            if(spawnedPellets[i].GetActivee())
             {
                 return false;
             }

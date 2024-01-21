@@ -12,6 +12,7 @@ public class BaseShip : MonoBehaviour
     [SerializeField] ShipControl shipMovement;
 
     [Header("Positions")]
+    [SerializeField] Transform scaleRoot;
     [SerializeField] Transform moveRoot;
     [SerializeField] List<Transform> leftRightMost;
     
@@ -59,6 +60,14 @@ public class BaseShip : MonoBehaviour
     protected virtual void Update()
     {
         //RotateTowards(orbitter);
+        if(Input.GetMouseButtonDown(0))
+        {
+            if(GameplayController.instance.GetState() == GameState.midGame)
+            {
+                shipMovement.SwitchDirection();
+                moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
+            }
+        }
     }
 
     public virtual void RotateTowards(Transform TargetObjTransform)
@@ -78,7 +87,7 @@ public class BaseShip : MonoBehaviour
         {
             
             other.transform.parent.parent.GetComponent<BasePellet>().Taken();
-            GameplayController.instance.AddScore();
+            GameplayController.instance.TakePellet();
         }
     }
 
@@ -100,5 +109,11 @@ public class BaseShip : MonoBehaviour
         LeanTween.moveLocalX(moveRoot.gameObject, .0f, 1.5f).setEase(LeanTweenType.easeOutQuad).setOnComplete(()=>{
             next();
         });
+    }
+
+    public virtual void ShowShip()
+    {
+        LeanTween.cancel(scaleRoot.gameObject);
+        LeanTween.scale(scaleRoot.gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutBack);
     }
 }

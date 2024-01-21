@@ -31,7 +31,7 @@ public class CircleAnimation : MonoBehaviour
 		for(int i = 0 ; i < circles.Count ; i++)
 		{
 			LeanTween.cancel(circles[i].gameObject);
-			LeanTween.scale(circles[i].gameObject, Vector3.one, 1.5f).setEase(LeanTweenType.easeOutQuad);
+			LeanTween.scale(circles[i].gameObject, Vector3.one, 1.0f).setEase(LeanTweenType.easeOutQuad);
 		}
 	}
 }

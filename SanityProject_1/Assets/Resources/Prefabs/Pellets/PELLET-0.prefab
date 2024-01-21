@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 2507609231453136547}
   - component: {fileID: 8092797721757977122}
   m_Layer: 0
-  m_Name: pellet
+  m_Name: PELLET-0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
