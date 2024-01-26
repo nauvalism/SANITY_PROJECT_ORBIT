@@ -1,17 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class RotateStaticly : MonoBehaviour {
 	public float Speed = 1;
+	public bool randomDirection = false;
+	public List<float> speedRandom;
 	// Use this for initialization
 	void Start () {
-//		int Name = 0;
-//		if (gameObject.name.IndexOf ("Static") != -1) {
-//			Name = Random.Range (1, 6);
-//			gameObject.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Obstacles/" + Name.ToString ());
-//			//////Debug.Log (gameObject.name + " Is Color changeable ");
-//		}
-		//LeanTween.rotate(gameObject, new Vector3(.0f,.0f,719.0f), Speed).setLoopType(LeanTweenType.clamp).setIgnoreTimeScale(true);
+		if(speedRandom != null)
+		{
+			if(speedRandom.Count == 2)
+			{
+				Speed = Random.Range(speedRandom[0], speedRandom[1]);
+				if(randomDirection)
+				{
+					int modifier = Random.Range(0,2);
+					if(modifier == 0)
+					{
+						Speed *= -1;
+					}
+				}
+				
+				
+			}
+		}
+		
+		
 	}
 	
 	// Update is called once per frame

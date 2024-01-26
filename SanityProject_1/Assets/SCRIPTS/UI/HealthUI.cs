@@ -20,10 +20,12 @@ public class HealthUI : MonoBehaviour
     public void Dissapear(bool fromOne)
     {
         LeanTween.cancel(rootManipulation.gameObject);
+        if(healthUIGraphic.color.a < 1)
+            return;
         if(fromOne)
         rootManipulation.localScale = Vector3.one;
         healthUIGraphic.color = Color.white;
-        LeanTween.scale(rootManipulation.gameObject, new Vector3(1.5f,1.5f,1.5f), 2.0f);
-        LeanTween.alpha(healthUIGraphic.GetComponent<RectTransform>(), .0f, 1.5f);
+        LeanTween.scale(rootManipulation.gameObject, new Vector3(1.5f,1.5f,1.5f), 1.0f);
+        LeanTween.alpha(healthUIGraphic.GetComponent<RectTransform>(), .0f, .5f);
     }
 }

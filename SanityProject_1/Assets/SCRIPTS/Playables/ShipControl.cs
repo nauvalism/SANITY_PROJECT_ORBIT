@@ -6,6 +6,7 @@ public class ShipControl : MonoBehaviour
 {
     public BaseShip theShip;
     public Transform rotator;
+    public Transform defaultPivot;
     [SerializeField] float rotateSpeed;
     [SerializeField] int rotateDirection;
     [SerializeField] bool move = true;
@@ -20,7 +21,12 @@ public class ShipControl : MonoBehaviour
         move = false;
     }
 
-
+    public void ResetRotationAndMovement()
+    {
+        ResetRotatePosition();
+        //transform.position = Vector3.zero;
+        
+    }
 
     private void FixedUpdate()
     {
@@ -43,5 +49,42 @@ public class ShipControl : MonoBehaviour
     public int GetDirection()
     {
         return rotateDirection;
+    }
+
+    public Transform GetRotator()
+    {
+        return rotator;
+    }
+
+    public void ResetRotatePosition()
+    {
+        //this.rotator.position = defaultPivot.position;
+        this.rotator.localPosition = Vector3.zero;
+        this.transform.rotation = Quaternion.identity;
+        theShip.SwitchScale(1);
+    }
+
+    public void RotateToZero(System.Action next)
+    {
+        move = false;
+
+        if(transform.rotation.z < 180.0f)
+        {
+            rotateDirection = 1;
+        }
+        else
+        {
+            rotateDirection = -1;
+        }
+
+        theShip.SwitchScale(rotateDirection);
+
+        LeanTween.cancel(gameObject);
+        LeanTween.rotateZ(gameObject, .0f, 1.0f).setEase(LeanTweenType.easeOutQuad).setOnComplete(()=>{
+            if(next != null)
+            {
+                next();
+            }
+        });
     }
 }

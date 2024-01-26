@@ -6,12 +6,15 @@ public class BaseBullets : MonoBehaviour
 {
 	[SerializeField] Rigidbody2D moverRb;
 	[SerializeField] BaseTurrets owner;
+	[SerializeField] int damage = 1;
 	[SerializeField] float speed = 100;
 	[SerializeField] Vector2 launchedDirection;
 	[SerializeField] Transform directionFrom;
 	[SerializeField] float angleModifier = 0;
 	[SerializeField] float rotateSpeed = 100;
 	[SerializeField] Transform target;
+	[SerializeField] bool destroyAfter = false;
+	[SerializeField] TrailRenderer trail;
 
 	private void FixedUpdate() {
 		if(target != null)
@@ -43,44 +46,80 @@ public class BaseBullets : MonoBehaviour
 	
 	public virtual void Launch()
 	{
+		trail.enabled = false;
 		moverRb.velocity = Vector2.zero;
 		moverRb.position = owner.GetSpawnPlace();
 		//Vector2 dir = directionFrom.position - target.position;
 		Vector2 dir = new Vector2(0,1);
 		dir.Normalize();
 		moverRb.AddForce(speed * dir);
+		trail.enabled = true;
+	}
 	
+	public virtual void Launch(Transform from, Transform direction)
+	{
+		trail.enabled = false;
+		moverRb.velocity = Vector2.zero;
+		moverRb.position = from.position;
+		Vector2 dir = direction.position - owner.GetSpawnPlace();
+		dir.Normalize();
+		moverRb.AddForce(speed * dir);
+		trail.enabled = true;
 	}
 	
 	public virtual void Launch(Transform direction)
 	{
+		trail.enabled = false;
 		moverRb.velocity = Vector2.zero;
 		moverRb.position = owner.GetSpawnPlace();
 		Vector2 dir = direction.position - owner.GetSpawnPlace();
 		dir.Normalize();
 		moverRb.AddForce(speed * dir);
-	
+		trail.enabled = true;
 	}
 	
 	public virtual void Launch(Vector2 direction)
 	{
+		trail.enabled = false;
 		moverRb.velocity = Vector2.zero;
 		moverRb.position = owner.GetSpawnPlace();
 		Vector2 dir = direction;
 		dir.Normalize();
 		moverRb.AddForce(speed * dir);
+		trail.enabled = true;
 	}
 
 	public virtual void Deactivate()
 	{
+		trail.enabled = false;
 		transform.parent.parent.gameObject.SetActive(false);
 	}
 
-	private void OnCollisionEnter2D(Collision2D other) {
+	
+
+	private void OnTriggerEnter2D(Collider2D other) {
 		if(other.gameObject.CompareTag("BulletLimit"))
+		{
+			if(destroyAfter == false)
+				Deactivate();
+			else
+				Destroy(transform.parent.parent.gameObject);
+		}
+
+		if(other.gameObject.CompareTag("Ship"))
 		{
 			Deactivate();
 		}
+	}
+
+	public void DestroyAfter()
+	{
+		this.destroyAfter = true;
+	}
+
+	public int GetDamage()
+	{
+		return damage;
 	}
 	
 }

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Pellet
   - BulletLimit
+  - Bullet
+  - Ship
   layers:
   - Default
   - TransparentFX

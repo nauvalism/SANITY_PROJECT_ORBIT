@@ -12,6 +12,10 @@ public class BaseTurrets : MonoBehaviour
 {
 	[SerializeField] protected int turretID = 0;
 	[SerializeField] protected int turretOrder = 0;
+	[SerializeField] protected int turretLevel = 0;
+	[SerializeField] protected float defaultScale = 1;
+	[SerializeField] protected float toScale = 1.1f;
+	[SerializeField] protected List<TurretAttributes> turretProfiles;
 	[SerializeField] protected BaseShip target;
 	
 	[Header("Main Area")]
@@ -23,6 +27,7 @@ public class BaseTurrets : MonoBehaviour
 	[Header("Bullets")]
 	[SerializeField] protected  bulletType typeOfBullet;
 	[SerializeField] protected  Transform bulletSpawnFrom;
+	
 	[SerializeField] protected  GameObject bulletPrefab;
 	[SerializeField] protected  List<BaseBullets> bulletPool;
 	[SerializeField] protected  Vector3 mainSpawnPosition;
@@ -31,7 +36,9 @@ public class BaseTurrets : MonoBehaviour
 	[SerializeField] protected  int bulletIndex = 0;
 
 	[Header("Effects")]
-	[SerializeField] ParticleSystem spawnParticle;
+	[SerializeField] protected ParticleSystem spawnParticle;
+	[SerializeField] protected Transform graphicRoot;
+	[SerializeField] protected SoundManager gunSound;
 	
 	protected void OnValidate()
 	{
@@ -44,13 +51,21 @@ public class BaseTurrets : MonoBehaviour
 	}
 	
 	// Awake is called when the script instance is being loaded.
-	protected void Awake()
+	protected virtual void Awake()
 	{
 		
 	}
 
-	protected void Start() {
+	protected virtual void Start() {
 		InitPool();
+		target = FindObjectOfType<BaseShip>();
+	}
+
+	protected virtual void Update() {
+		if(graphicRoot.transform.localScale.x > defaultScale)
+        {
+            graphicRoot.transform.localScale = new Vector3(graphicRoot.transform.localScale.x - Time.deltaTime, graphicRoot.transform.localScale.y - Time.deltaTime, 0);
+        }
 	}
 	
 	public virtual void InitPool()
@@ -85,6 +100,7 @@ public class BaseTurrets : MonoBehaviour
 	
 	public virtual void LaunchBullet()
 	{
+		gunSound.Play(0);
 		spawnParticle.Play();
 		int prevIndex = -1;
 		if(bulletIndex == 0)
@@ -105,9 +121,14 @@ public class BaseTurrets : MonoBehaviour
 		bulletPool[bulletIndex].Launch(crossHair);
 		//bulletPool[bulletIndex].Launch();
 		bulletIndex++;
+		if(bulletIndex >= bulletPool.Count)
+		{
+			bulletIndex = 0;
+		}
+		graphicRoot.localScale = new Vector3(toScale, toScale, toScale);
 	}
 
-	GameObject GetTopObject(BaseBullets bullet)
+	public GameObject GetTopObject(BaseBullets bullet)
 	{
 		return bullet.transform.parent.parent.gameObject;
 	}
@@ -125,14 +146,55 @@ public class BaseTurrets : MonoBehaviour
 		}
 	}
 	
-	
+	public virtual void AddLevel(int amount = 1)
+	{
+		this.turretLevel += amount;
+		bool max = false;
+		if(turretLevel >= turretProfiles.Count)
+		{
+			max = true;
+			turretLevel = turretProfiles.Count -1;
+		}
+		ApplyProfile(max);
+
+	}
+
+	public virtual void ApplyProfile(bool max)
+	{
+		if(max)
+		{
+			toScale += 0.05f;
+			defaultScale += 0.05f;
+		}
+		else
+		{
+			this.toScale = turretProfiles[turretLevel].scaleTo;
+			this.defaultScale = turretProfiles[turretLevel].scale;
+			
+
+		}
+		graphicRoot.localScale = new Vector3(toScale, toScale, toScale);
+		graphicRoot.GetComponent<SpriteRenderer>().sprite = turretProfiles[turretLevel].spriteChange;
+		graphicRoot.GetComponent<SpriteRenderer>().color = turretProfiles[turretLevel].levelColor;
+	}
 	
 	public virtual void ShowTurret()
 	{
+		Transform tr = transform.parent.parent;
+		LeanTween.cancel(tr.gameObject);
 		
+		tr.localScale = Vector3.one;
+		LeanTween.scale(tr.gameObject, new Vector3(1.25f,1.25f,1.25f), 1.0f).setEase(LeanTweenType.punch);
+	}
+
+	public void HideTurret()
+	{
+		Transform tr = transform.parent.parent;
+		LeanTween.cancel(tr.gameObject);
+		LeanTween.scale(tr.gameObject, Vector3.zero, .25f).setEase(LeanTweenType.easeOutQuad).setDestroyOnComplete(true);
 	}
 	
-	public virtual void ShowTurrte(Vector3 where)
+	public virtual void ShowTurret(Vector3 where)
 	{
 		
 	}
@@ -144,9 +206,48 @@ public class BaseTurrets : MonoBehaviour
 	
 	
 	
-	public virtual void DeactivateTurret()
+	public virtual void DeactivateTurret(bool destroyimmediate = false)
 	{
-		
+		StopAllCoroutines();
+		for(int i = 0 ; i < bulletPool.Count ; i++)
+		{
+			try
+			{
+				if(bulletPool[i].isActiveAndEnabled == false)
+				{
+					Destroy(bulletPool[i]);
+				}
+				else
+				{
+					if(destroyimmediate)
+					{
+						Destroy(bulletPool[i].gameObject);
+					}
+					else
+					{
+						bulletPool[i].DestroyAfter();
+					}
+					
+				}
+			}
+			catch(System.Exception e)
+			{
+
+			}
+			
+		}
+	}
+
+	
+
+	public void ChangeAttribute(int level)
+	{
+
+	}
+
+	public void ApplyAttribute()
+	{
+
 	}
 	
 	public void RotateTowardsTarget()

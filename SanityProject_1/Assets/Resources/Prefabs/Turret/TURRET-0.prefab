@@ -7,9 +7,57 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: crossHairs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: spawnPlaces.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: crossHairs.Array.data[0]
+      value: 
+      objectReference: {fileID: 6569744456970402477}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: spawnParticles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: spawnPlaces.Array.data[0]
+      value: 
+      objectReference: {fileID: 6569744458211974852}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: spawnParticles.Array.data[0]
+      value: 
+      objectReference: {fileID: 6569744457336990733}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9d22c6dcb62867744964385758551745, type: 2}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f8dd838b6422a54787a1f9798547928, type: 2}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3ce4775c1d89e3c4787563d91627fb32, type: 2}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 99dc7abab197ad740acc4b52242ae6dd, type: 2}
+    - target: {fileID: 1557917937907155418, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+      propertyPath: turretProfiles.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0ca78b7b4c22d7645b59e6d48edfd609, type: 2}
     - target: {fileID: 1557917937916463905, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
       propertyPath: m_Name
-      value: TURRET-BASE
+      value: TURRET-0
       objectReference: {fileID: 0}
     - target: {fileID: 1557917937916463910, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
       propertyPath: m_RootOrder
@@ -57,3 +105,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+--- !u!4 &6569744456970402477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1557917937933778891, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+  m_PrefabInstance: {fileID: 5670803627783980390}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6569744457336990733 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1557917937227409771, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+  m_PrefabInstance: {fileID: 5670803627783980390}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6569744458211974852 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1557917938640444322, guid: 1c895d25bc14cac47853fa3a88199ca1, type: 3}
+  m_PrefabInstance: {fileID: 5670803627783980390}
+  m_PrefabAsset: {fileID: 0}

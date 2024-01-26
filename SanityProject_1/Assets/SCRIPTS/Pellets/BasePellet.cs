@@ -5,6 +5,7 @@ using UnityEngine;
 public class BasePellet : MonoBehaviour
 {
     int pelletID = 0;
+    [SerializeField] int pelletValue = 1;
     [SerializeField] Transform mover;
     [SerializeField] Transform graphicRoot;
     [SerializeField] List<SpriteRenderer> graphics;
@@ -54,11 +55,11 @@ public class BasePellet : MonoBehaviour
         pelletSound.Play();
         pelletCol.enabled = false;
         LeanTween.cancel(mover.gameObject);
-        LeanTween.scale(mover.gameObject, new Vector3(1.5f,1.5f,1.5f), 1.5f);
+        LeanTween.scale(mover.gameObject, new Vector3(1.5f,1.5f,1.5f), 1.0f);
         for(int i = 0 ; i < graphics.Count ; i++)
         {
             LeanTween.cancel(graphics[i].gameObject);
-            LeanTween.alpha(graphics[i].gameObject, .0f, 1.0f);
+            LeanTween.alpha(graphics[i].gameObject, .0f, .50f);
         }
     }
 
@@ -71,5 +72,9 @@ public class BasePellet : MonoBehaviour
     public bool GetActivee()
     {
         return _active;
+    }
+    public int GetPelletValue()
+    {
+        return pelletValue;
     }
 }
