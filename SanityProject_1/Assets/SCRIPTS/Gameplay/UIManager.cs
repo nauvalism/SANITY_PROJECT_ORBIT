@@ -38,6 +38,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI hitsTakenTxt;
     [SerializeField] TextMeshProUGUI scoresTxt;
 
+    [Header("Extra Stats UI")]
+    [SerializeField] Transform infoTxtParent;
+    [SerializeField] GameObject infoTxtPrefab;
+    [SerializeField] List<InfoTxt> extraStatsTxt;
 
     private void Update() {
         if(punching)
@@ -416,6 +420,111 @@ public class UIManager : MonoBehaviour
 
 
         
+    }
+
+    public void ShowAdditionalStats(AdditionalStats add)
+    {
+        int num = 0;
+        ClearAllExtraStats();
+        extraStatsTxt = new List<InfoTxt>();
+
+        IEnumerator ShowAdditionals()
+        {
+            GameObject g;
+            InfoTxt inf;
+            bool plus = true;
+            if(add.speedAddition != 0)
+            {
+                
+                if(add.speedAddition >= 0)
+                {
+                    plus = true;
+                }
+                else
+                {
+                    plus = false;
+                }
+                g = SpawnText();
+                inf = g.GetComponent<InfoTxt>();
+                extraStatsTxt.Add(inf);
+                inf.FillValue("Speed", add.speedAddition.ToString(), plus);
+                yield return new WaitForSeconds(0.125f);
+            }
+
+            if(add.dmgTaken != 0)
+            {
+                if(add.dmgTaken >= 0)
+                {
+                    plus = true;
+                }
+                else
+                {
+                    plus = false;
+                }
+                g = SpawnText();
+                inf = g.GetComponent<InfoTxt>();
+                extraStatsTxt.Add(inf);
+                inf.FillValue("Dmg Taken", add.dmgTaken.ToString(), plus);
+                yield return new WaitForSeconds(0.125f);
+            }
+
+            if(add.visionRadius != 0)
+            {
+                if(add.visionRadius >= 0)
+                {
+                    plus = true;
+                }
+                else
+                {
+                    plus = false;
+                }
+                g = SpawnText();
+                inf = g.GetComponent<InfoTxt>();
+                extraStatsTxt.Add(inf);
+                inf.FillValue("Vision", add.visionRadius.ToString(), plus);
+                yield return new WaitForSeconds(0.125f);
+            }
+
+            if(add.shot != 0)
+            {
+                if(add.shot >= 0)
+                {
+                    plus = true;
+                }
+                else
+                {
+                    plus = false;
+                }
+                g = SpawnText();
+                inf = g.GetComponent<InfoTxt>();
+                extraStatsTxt.Add(inf);
+                inf.FillValue("Bullet", add.shot.ToString(), plus);
+                
+            }
+        }
+
+        GameObject SpawnText()
+        {
+            GameObject result;
+            result = (GameObject)Instantiate(infoTxtPrefab, Vector3.zero, Quaternion.identity, infoTxtParent);
+            return result;
+        }
+
+        
+
+        void ClearAllExtraStats()
+        {
+            if(extraStatsTxt != null)
+            {
+                if(extraStatsTxt.Count > 0)
+                {
+                    for(int i = 0 ; i < extraStatsTxt.Count; i++)
+                    {
+                        Destroy(extraStatsTxt[i].gameObject);
+                    }
+                }
+            }
+        }
     }
 
 

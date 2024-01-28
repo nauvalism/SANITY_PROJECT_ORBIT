@@ -8,6 +8,7 @@ public class ShipControl : MonoBehaviour
     public Transform rotator;
     public Transform defaultPivot;
     [SerializeField] float rotateSpeed;
+    [SerializeField] float defaultSpeed = 1;
     [SerializeField] int rotateDirection;
     [SerializeField] bool move = true;
 
@@ -26,6 +27,16 @@ public class ShipControl : MonoBehaviour
         ResetRotatePosition();
         //transform.position = Vector3.zero;
         
+    }
+
+    public void ResetSpeed()
+    {
+        this.rotateSpeed = defaultSpeed;
+    }
+
+    public void AddSpeed(int i)
+    {
+        rotateSpeed += (float)i;
     }
 
     private void FixedUpdate()

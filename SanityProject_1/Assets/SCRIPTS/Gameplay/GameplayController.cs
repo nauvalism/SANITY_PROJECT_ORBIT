@@ -57,7 +57,7 @@ public class GameplayController : MonoBehaviour
     [Header("Stats")]
     [SerializeField] float sessionSeconds;
     [SerializeField] CalculatedStats stats;
-    [SerializeField] 
+    [SerializeField] AdditionalStats extraStats;
     
     private void Awake() {
         instance = this;
@@ -66,7 +66,19 @@ public class GameplayController : MonoBehaviour
 
     public void InitStats()
     {
+        stats = new CalculatedStats();
+        extraStats = new AdditionalStats();
+    }
 
+    public void AddExtraStats(AdditionalStats addition)
+    {
+        extraStats.AddStats(addition);
+    }
+
+    public void ApplyStats(AdditionalStats stat)
+    {
+        extraStats.AddStats(stat);
+        
     }
 
     public CalculatedStats GetStats()
@@ -287,6 +299,8 @@ public class GameplayController : MonoBehaviour
         else
         {
             ui.UpdateLevel(this.level);
+            AdditionalStats stat = currentArena.GetCurrentStatLevel(level);
+            ApplyStats(stat);
             TBEController.instance.LevelupTurret();
             Flashing(()=>{
                 

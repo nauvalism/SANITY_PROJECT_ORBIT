@@ -843,12 +843,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5282fa8f2acd88147b547642a09aabcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statsAppliedInThis:
+    speedAddition: 0
+    dmgTaken: 0
+    visionRadius: 45
+    shot: 0
   cameraZoomValue: 5
   center: {fileID: 1338773276659290260}
   top: {fileID: 1338773277067921620}
   turretPlace: {fileID: 3599286703642858775}
   turretIDInThis: 0
   maxLevel: 5
+  statsApplieds:
+  - speedAddition: 0
+    dmgTaken: 0
+    visionRadius: 0
+    shot: 0
+  - speedAddition: 1
+    dmgTaken: 0
+    visionRadius: 0
+    shot: 0
+  - speedAddition: 0
+    dmgTaken: 0
+    visionRadius: 0
+    shot: 0
+  - speedAddition: 1
+    dmgTaken: 0
+    visionRadius: 0
+    shot: 0
+  - speedAddition: 0
+    dmgTaken: 0
+    visionRadius: 0
+    shot: 0
   currentlevel: 0
   spawner: {fileID: 800863373768753628}
   personalCamera: {fileID: 2171732228670001365}

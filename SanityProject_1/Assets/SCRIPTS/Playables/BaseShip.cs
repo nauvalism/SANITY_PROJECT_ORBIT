@@ -9,6 +9,7 @@ public class BaseShip : MonoBehaviour
     [Header("Health and Aliveness")]
     [SerializeField] private List<Sprite> ShipHealthSprites;
     [SerializeField] public int hp = 2;
+    [SerializeField] int dmgTaken = 0;
     [SerializeField] ShipControl shipMovement;
     [SerializeField] Collider2D mainCollider;
 
@@ -28,6 +29,8 @@ public class BaseShip : MonoBehaviour
     [Header("Extra")]
     [SerializeField] SoundManager engineSound;
     [SerializeField] Animator anim;
+    [SerializeField] Transform fieldOfView;
+    [SerializeField] float defeaultFoV;
 
     public void Damage(int amt)
     {
@@ -127,7 +130,7 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
 
     public void GetHit(BaseBullets bullet)
     {
-        int dmg = bullet.GetDamage();
+        int dmg = bullet.GetDamage() + dmgTaken;
         if(this.hp == 0)
         {
             //dead

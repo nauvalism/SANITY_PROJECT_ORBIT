@@ -5,12 +5,14 @@ using Cinemachine;
 
 public class BaseArena : MonoBehaviour
 {
+    [SerializeField] AdditionalStats statsAppliedInThis;
     [SerializeField] float cameraZoomValue = 5;
     [SerializeField] Transform center;
     [SerializeField] Transform top;
     [SerializeField] Transform turretPlace;
     [SerializeField] int turretIDInThis;
     [SerializeField] int maxLevel;
+    [SerializeField] List<AdditionalStats> statsApplieds;
     [SerializeField] int currentlevel;
     [SerializeField] PelletSpawner spawner;
 
@@ -87,5 +89,10 @@ public class BaseArena : MonoBehaviour
     public PelletSpawner GetPellet()
     {
         return spawner;
+    }
+
+    public AdditionalStats GetCurrentStatLevel(int lvl)
+    {
+        return statsApplieds[lvl];
     }
 }
