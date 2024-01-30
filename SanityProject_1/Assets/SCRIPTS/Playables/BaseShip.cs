@@ -141,9 +141,10 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
         {
             this.hp -= dmg;
             GameplayController.instance.GetHit();
+            GameplayController.instance.UpdateHP(hp);
             if(this.hp > 0)
             {
-                GameplayController.instance.UpdateHP(hp);
+                
                 GameplayController.instance.ShakeCamera();
                 GameplayController.instance.ShowVignette(Color.red);
                 HitRecovery();
@@ -195,6 +196,7 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
         {
             Deactivate();
             
+
             GameplayController.instance.ShakeCamera(2.0f, 4.0f);
             GameplayController.instance.UnFlash();
             for(int i = 0 ; i < deathExplosions.Count ;i++)
@@ -222,17 +224,28 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
 
     public void Deactivate()
     {
+        Debug.Log("Ship Deactivated");
         shipMovement.DisableMovement();
         
     }
 
     public void RefreshHealthSprite()
     {
-        mainShipSprite.sprite = ShipHealthSprites[(hp-1)];
+        try
+        {
+            mainShipSprite.sprite = ShipHealthSprites[(hp-1)];
+        }catch(System.Exception e)
+        {
+
+        }
+        
     }
 
     public void Reset()
     {
+        dmgTaken = 0;
+        shipMovement.ResetSpeed();
+        ModifyViews(45);
         hp = ShipHealthSprites.Count;
         RefreshHealthSprite();
         ResetPosition();
@@ -292,6 +305,7 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
     {
         mainCollider.enabled = false;
         Deactivate();
+        ModifyViews(100.0f);
         shipMovement.RotateToZero(()=>{
             SwitchScale(1);
             StartCoroutine(GoNextArena(to));
@@ -308,9 +322,43 @@ moveRoot.transform.localScale = new Vector3(shipMovement.GetDirection(), 1,1);
                 movementParent.position = too.GetCenter().position;
                 transform.SetParent(movementParent, true);
                 GameplayController.instance.AfterNextArena();
+                ModifyViews(GameplayController.instance.GetExtraStats().visionRadius);
                 mainCollider.enabled = true;
             });
         }
+    }
+
+    public virtual void AddSpeed(float value)
+    {
+        shipMovement.AddSpeed(value);
+    }
+
+    public virtual void AddDmgTaken(int value)
+    {
+        dmgTaken += value;
+    }
+
+    public virtual void AddHealth(int value)
+    {
+        int maxHP = ShipHealthSprites.Count;
+        maxHP -= 1;
+        int to = (hp + value);
+        if(to > maxHP)
+        {
+            return;
+        }
+        else
+        {
+            this.hp += value;
+        }
+
+        GameplayController.instance.UpdateHP(hp);
+    }
+
+    public virtual void ModifyViews(float to)
+    {
+        LeanTween.cancel(fieldOfView.gameObject);
+        LeanTween.scale(fieldOfView.gameObject, new Vector3(to,to,to), 1.0f).setEase(LeanTweenType.easeOutQuad);
     }
 
     public virtual void PlayFast()

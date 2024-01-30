@@ -39,6 +39,13 @@ public class ShipControl : MonoBehaviour
         rotateSpeed += (float)i;
     }
 
+    public void AddSpeed(float f)
+    {
+        rotateSpeed += f;
+    }
+
+    
+
     private void FixedUpdate()
     {
         if(theShip.Alive() && move)

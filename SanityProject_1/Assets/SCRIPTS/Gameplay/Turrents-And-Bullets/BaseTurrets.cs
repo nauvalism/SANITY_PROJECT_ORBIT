@@ -48,6 +48,7 @@ public class BaseTurrets : MonoBehaviour
 		float _ymsp = 100 + (turretID * 10);
 		
 		mainSpawnPosition = new Vector2(_xmsp, _ymsp);
+		turretProfiles = new List<TurretAttributes>(Resources.LoadAll<TurretAttributes>("TurretProfiles/Turret-"+turretID));
 	}
 	
 	// Awake is called when the script instance is being loaded.

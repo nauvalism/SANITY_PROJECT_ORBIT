@@ -246,7 +246,11 @@ public class UIManager : MonoBehaviour
     public void Flashing(System.Action during, System.Action after)
     {
         flash.color = Color.white;
-        during();
+        if(during != null)
+        {
+            during();
+        }
+        
         LeanTween.alpha(flash.GetComponent<RectTransform>(), .0f, .50f).setEase(LeanTweenType.easeOutQuad).setIgnoreTimeScale(true).setOnComplete(()=>{
             if(after != null)
             {
@@ -422,11 +426,12 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void ShowAdditionalStats(AdditionalStats add)
+    public void ShowAdditionalStats(AdditionalStats before, AdditionalStats add)
     {
         int num = 0;
         ClearAllExtraStats();
         extraStatsTxt = new List<InfoTxt>();
+        StartCoroutine(ShowAdditionals());
 
         IEnumerator ShowAdditionals()
         {
@@ -448,6 +453,7 @@ public class UIManager : MonoBehaviour
                 inf = g.GetComponent<InfoTxt>();
                 extraStatsTxt.Add(inf);
                 inf.FillValue("Speed", add.speedAddition.ToString(), plus);
+                inf.Show();
                 yield return new WaitForSeconds(0.125f);
             }
 
@@ -465,12 +471,14 @@ public class UIManager : MonoBehaviour
                 inf = g.GetComponent<InfoTxt>();
                 extraStatsTxt.Add(inf);
                 inf.FillValue("Dmg Taken", add.dmgTaken.ToString(), plus);
+                inf.Show();
                 yield return new WaitForSeconds(0.125f);
             }
 
-            if(add.visionRadius != 0)
+            if(add.visionRadius != before.visionRadius)
             {
-                if(add.visionRadius >= 0)
+                float difference = before.visionRadius - add.visionRadius;
+                if(difference >= 0)
                 {
                     plus = true;
                 }
@@ -481,7 +489,8 @@ public class UIManager : MonoBehaviour
                 g = SpawnText();
                 inf = g.GetComponent<InfoTxt>();
                 extraStatsTxt.Add(inf);
-                inf.FillValue("Vision", add.visionRadius.ToString(), plus);
+                inf.FillValue("Vision", difference.ToString(), plus);
+                inf.Show();
                 yield return new WaitForSeconds(0.125f);
             }
 
@@ -498,8 +507,8 @@ public class UIManager : MonoBehaviour
                 g = SpawnText();
                 inf = g.GetComponent<InfoTxt>();
                 extraStatsTxt.Add(inf);
-                inf.FillValue("Bullet", add.shot.ToString(), plus);
-                
+                inf.FillValue("HP", add.shot.ToString(), plus);
+                inf.Show();
             }
         }
 

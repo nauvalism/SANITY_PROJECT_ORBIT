@@ -47,7 +47,7 @@ public class InfoTxt : MonoBehaviour
             cg.alpha = f;
         });
         LeanTween.moveLocalX(mover.gameObject, .0f, 0.35f).setEase(LeanTweenType.easeOutQuad).setOnComplete(()=>{
-            
+            Hide(2);
         });
     }
 

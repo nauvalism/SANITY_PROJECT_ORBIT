@@ -16,4 +16,15 @@ MonoBehaviour:
   databasePrefix: Turret
   data:
   - {fileID: 6569744456985595463, guid: 508a6894c7b130b47bacef25a14fe188, type: 3}
+  - {fileID: 6569744456985595463, guid: 9f5a03428bcb8914a99909474670f674, type: 3}
+  - {fileID: 6569744456985595463, guid: d468b0896f457004c9f0a25212342bf7, type: 3}
+  - {fileID: 6569744456985595463, guid: 27c99fb3e348d1e43aa8e2892802b4be, type: 3}
+  - {fileID: 6569744456985595463, guid: 81cb2a47d15f5d74a94c75dbf0eb3fdf, type: 3}
+  - {fileID: 6569744456985595463, guid: cbacc89100589954a8f16060d6c07b6b, type: 3}
+  - {fileID: 6569744456985595463, guid: 520608d8ac9b34b44ba918b9616f31e5, type: 3}
+  - {fileID: 6569744456985595463, guid: e0cb5c728ba67f940a21481d4696e0ad, type: 3}
+  - {fileID: 6569744456985595463, guid: af307953f91fce84c86e94b585e0ede3, type: 3}
+  - {fileID: 6569744456985595463, guid: c9adc4e7cd9986e419faff2d5a3770b1, type: 3}
+  - {fileID: 6569744456985595463, guid: af3d8c296dfb6b44791ece4f8a50ca04, type: 3}
+  - {fileID: 6569744456985595463, guid: 5403e8009f24f404fb59b25d79d33190, type: 3}
   totalPath: Prefabs/Turret

@@ -5126,6 +5126,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 60827ec2c1a8f5f4a8e69a5db58bf631, type: 3}
   - {fileID: 21300000, guid: 3e0bd627ddc8d8241b3f72a7365674a4, type: 3}
   hp: 2
+  dmgTaken: 0
   shipMovement: {fileID: 0}
   mainCollider: {fileID: 8495796000503776172}
   scaleRoot: {fileID: 8495796000503776176}
@@ -5148,6 +5149,8 @@ MonoBehaviour:
   deathParticle: {fileID: 1959025464075592211}
   engineSound: {fileID: 7929452251674894512}
   anim: {fileID: 8495796000503776179}
+  fieldOfView: {fileID: 331330112529643324}
+  defeaultFoV: 0
   angleModifier: 0
 --- !u!95 &8495796000503776179
 Animator:

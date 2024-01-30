@@ -22,6 +22,7 @@ public class GameplayController : MonoBehaviour
     [SerializeField] float idleCamSize;
     [SerializeField] int score = 0;
     [SerializeField] int level = 0;
+    [SerializeField] int localLevel = 0;
     [SerializeField] int arenaTier = 0;
     [SerializeField] UIManager ui;
     [SerializeField] BaseShip playerShip;
@@ -78,12 +79,19 @@ public class GameplayController : MonoBehaviour
     public void ApplyStats(AdditionalStats stat)
     {
         extraStats.AddStats(stat);
-        
+        playerShip.AddSpeed(stat.speedAddition);
+        playerShip.AddDmgTaken(stat.dmgTaken);
+        playerShip.AddHealth(stat.shot);
     }
 
     public CalculatedStats GetStats()
     {
         return stats;
+    }
+
+    public AdditionalStats GetExtraStats()
+    {
+        return extraStats;
     }
 
     private void Start() {
@@ -168,6 +176,7 @@ public class GameplayController : MonoBehaviour
 
     public void GameOver()
     {
+        stats.UpdateTimeSpent(arenaTier, sessionSeconds);
         SetState(GameState.ending);
         musicManager.Stop();
         SetState(GameState.ending);
@@ -181,6 +190,9 @@ public class GameplayController : MonoBehaviour
 
     public void ResetAll()
     {
+        level = 0;
+        localLevel = 0;
+        InitStats();
         ClearArena();
         ClearPellet();
         ZoomCam(false);
@@ -216,6 +228,7 @@ public class GameplayController : MonoBehaviour
             
             Destroy(allArena[i].gameObject);
         }
+        arenaTier = 0;
     }
 
     public void ClearPellet()
@@ -285,13 +298,14 @@ public class GameplayController : MonoBehaviour
     public void AddLevel()
     {
         this.level++;
+        this.localLevel++;
         stats.AddLevelClear();
         bool next = ArenaManager.instance.GetActiveArena().AddLevel();
         
         if(next)
         {
             TBEController.instance.DeactivateActiveturret(true);
-            
+            Flashing(null,null);
             playerShip.Deactivate();
             AddArenaTier();
             
@@ -299,7 +313,14 @@ public class GameplayController : MonoBehaviour
         else
         {
             ui.UpdateLevel(this.level);
-            AdditionalStats stat = currentArena.GetCurrentStatLevel(level);
+            
+            AdditionalStats stat = ArenaManager.instance.GetActiveArena().GetCurrentStatLevel(level);
+            bool viewUpdate = false;
+            if(stat.visionRadius != extraStats.visionRadius)
+            {
+                viewUpdate = true;
+            }
+            AdditionalStats beforeStat = new AdditionalStats(extraStats);
             ApplyStats(stat);
             TBEController.instance.LevelupTurret();
             Flashing(()=>{
@@ -311,9 +332,14 @@ public class GameplayController : MonoBehaviour
                 });
                 RespawnPellet(20);
             },()=>{
-                
+                if(viewUpdate)
+                {
+                    playerShip.ModifyViews(extraStats.visionRadius);
+                }
+                ui.ShowAdditionalStats(beforeStat, stat);
                 //Time.timeScale = 1.0f;
             });
+            SetState(GameState.midGame);
         }
         
     }
@@ -326,7 +352,7 @@ public class GameplayController : MonoBehaviour
         activeArena = a;
         playerShip.PrepareGoNextArena(a);
         sessionSeconds = 0;
-        
+        localLevel = 0;
     }
 
     public BaseArena SpawnNextArena()
@@ -337,6 +363,8 @@ public class GameplayController : MonoBehaviour
     public void AfterNextArena()
     {
         RefreshActiveCamera();
+        ArenaManager.instance.ActivateNextArena();
+        activeArena = ArenaManager.instance.GetActiveArena();
         TBEController.instance.SetTurretPosition(activeArena.GetTurretnSpawnPlace());
         TBEController.instance.SpawnTurret(arenaTier);
         TBEController.instance.ActivateActiveTurret();
@@ -600,6 +628,17 @@ public class CalculatedStats
         nearMisses = new List<int>();
     }
 
+    public void UpdateTimeSpent(int arenaIndex, float v)
+    {
+        try
+        {
+            timeSpents[arenaIndex] = v;
+        }catch(System.Exception e)
+        {
+
+        }
+    }
+
     public void AddTimeSpent(float v)
     {
         timeSpents.Add(v);
@@ -667,11 +706,27 @@ public class AdditionalStats
 
     }
 
+    public void Fill(float speed, int dmgtkn, float vision, int heart)
+    {
+        this.speedAddition = speed;
+        this.dmgTaken = dmgtkn;
+        this.visionRadius = vision;
+        this.shot = heart;
+    }
+
+    public AdditionalStats(AdditionalStats cloned)
+    {
+        this.speedAddition = cloned.speedAddition;
+        this.dmgTaken = cloned.dmgTaken;
+        this.visionRadius = cloned.visionRadius;
+        this.shot = cloned.shot;
+    }
+
     public void AddStats(AdditionalStats otherStats)
     {
         this.speedAddition += otherStats.speedAddition;
         this.dmgTaken += otherStats.dmgTaken;
-        this.visionRadius += otherStats.visionRadius;
+        this.visionRadius = otherStats.visionRadius;
         this.shot += otherStats.shot;
     }
 }
